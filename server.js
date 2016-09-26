@@ -9,15 +9,21 @@ app.use(express.static('./public'))
 app.get('/:time', function(req, res){
 
   var time = moment(req.params.time);
-  if (time.isValid()){
-      console.log(time);
-      var response = {
-        unix: time.unix(),
-        natural: time.format('MMMM Do YYYY, h:mm:ss a')
+if (req.params.time != 'favicon.ico'){
+  var unix = moment(Number(req.params.time));
+}
 
-      }
+  if (unix.isValid()){
+    var response ={
+      unix: unix.unix(),
+      natural: unix.format('MMMM Do YYYY, h:mm:ss a')
+    }
+  } else if (time.isValid()){
+    var response = {
+      unix: time.unix(),
+      natural: time.format('MMMM Do YYYY, h:mm:ss a')
+    }
   } else {
-    console.log(time);
     var response  = {
       unix: null,
       natural: null
