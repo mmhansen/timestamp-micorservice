@@ -1,7 +1,16 @@
 /* General */
 body {
   margin: 50px;
+  margin-left: 200px;
+  font-family: sans-serif;
 }
-h1 {
-  color: blue;
+.cont {
+  background: #E9ECEF;
+  display: inline-block;
+  padding: 10px 30px;
+}
+@media (max-width: 600px){
+  body {
+    margin: 24px;
+  }
 }
