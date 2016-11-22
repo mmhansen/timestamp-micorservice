@@ -1,38 +1,31 @@
 var express = require('express');
-var path = require('path');
 var moment = require('moment');
 
-var app = express()
-// serve up the static files from public
+var app = express();
+
 app.use(express.static('./public'))
 
-app.get('/:time', function(req, res){
+app.get('/:date', function(req, res) {
 
-  var time = moment(req.params.time);
-if (req.params.time != 'favicon.ico'){
-  var unix = moment(Number(req.params.time));
-}
+  var dateParam = req.params.date;
+  var human = null;
+  var unix = null;
 
-  if (unix.isValid()){
-    var response ={
-      unix: unix.unix(),
-      natural: unix.format('MMMM Do YYYY, h:mm:ss a')
-    }
-  } else if (time.isValid()){
-    var response = {
-      unix: time.unix(),
-      natural: time.format('MMMM Do YYYY, h:mm:ss a')
-    }
-  } else {
-    var response  = {
-      unix: null,
-      natural: null
-    }
+  if (dateParam.match(/^[0-9]+$/)) {
+    unix = dateParam;
+    human = moment.unix(dateParam).format('MMMM DD, YYYY');
+  } else if (dateParam.match(/\b\w+\b [0-9]{2}, [0-9]{4}/)) {
+      human = dateParam
+      unix = moment(dateParam, 'MMMM DD, YYYY').unix();
   }
 
-  res.json(response);
-})
 
+  res.json({
+    unix: unix,
+    natural: human
+  });
+
+});
 
 var server = app.listen(process.env.PORT || 3000, function(){
   console.log('App listening on port 3000')
